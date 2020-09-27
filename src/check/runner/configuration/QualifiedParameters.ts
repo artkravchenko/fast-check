@@ -1,5 +1,5 @@
 import prand, { RandomGenerator } from 'pure-rand';
-import { Parameters } from './Parameters';
+import { Parameters, PartialExample } from './Parameters';
 import { VerbosityLevel } from './VerbosityLevel';
 import { RunDetails } from '../reporter/RunDetails';
 
@@ -21,6 +21,7 @@ export class QualifiedParameters<T> {
   unbiased: boolean;
   verbose: VerbosityLevel;
   examples: T[];
+  partialExamples: PartialExample<T>[];
   endOnFailure: boolean;
   skipAllAfterTimeLimit: number | null;
   interruptAfterTimeLimit: number | null;
@@ -46,6 +47,7 @@ export class QualifiedParameters<T> {
     this.path = QualifiedParameters.readOrDefault(p, 'path', '');
     this.unbiased = QualifiedParameters.readBoolean(p, 'unbiased');
     this.examples = QualifiedParameters.readOrDefault(p, 'examples', []);
+    this.partialExamples = QualifiedParameters.readOrDefault(p, 'partialExamples', []);
     this.endOnFailure = QualifiedParameters.readBoolean(p, 'endOnFailure');
     this.reporter = QualifiedParameters.readOrDefault(p, 'reporter', null);
     this.asyncReporter = QualifiedParameters.readOrDefault(p, 'asyncReporter', null);
@@ -67,6 +69,7 @@ export class QualifiedParameters<T> {
       unbiased: this.unbiased,
       verbose: this.verbose,
       examples: this.examples,
+      partialExamples: this.partialExamples,
       endOnFailure: this.endOnFailure,
       reporter: orUndefined(this.reporter),
       asyncReporter: orUndefined(this.asyncReporter),
