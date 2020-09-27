@@ -32,7 +32,7 @@ function streamSample<Ts>(
       : { ...readConfigureGlobal(), ...params };
   const qParams: QualifiedParameters<Ts> = QualifiedParameters.read<Ts>(extendedParams);
   const tossedValues: Stream<() => Shrinkable<Ts>> = stream(
-    toss(toProperty(generator, qParams), qParams.seed, qParams.randomType, qParams.examples)
+    toss(toProperty(generator, qParams), qParams.seed, qParams.randomType, qParams.examples, qParams.partialExamples)
   );
   if (qParams.path.length === 0) {
     return tossedValues.take(qParams.numRuns).map((s) => s().value_);

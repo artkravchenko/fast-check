@@ -3,6 +3,8 @@ import { RandomType } from './RandomType';
 import { VerbosityLevel } from './VerbosityLevel';
 import { RunDetails } from '../reporter/RunDetails';
 
+export type PartialExample<T> = (values: T) => T;
+
 /**
  * Customization of the parameters used to run the properties
  * @public
@@ -105,6 +107,7 @@ export interface Parameters<T = void> {
    * It enables users to come with examples they want to test at every run
    */
   examples?: T[];
+  partialExamples?: PartialExample<T>[];
   /**
    * Stop run on failure
    *

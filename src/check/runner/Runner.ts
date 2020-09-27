@@ -124,7 +124,7 @@ function check<Ts>(rawProperty: IRawProperty<Ts>, params?: Parameters<Ts>) {
   if (qParams.asyncReporter !== null && !rawProperty.isAsync())
     throw new Error('Invalid parameters encountered, only asyncProperty can be used when asyncReporter specified');
   const property = decorateProperty(rawProperty, qParams);
-  const generator = toss(property, qParams.seed, qParams.randomType, qParams.examples);
+  const generator = toss(property, qParams.seed, qParams.randomType, qParams.examples, qParams.partialExamples);
 
   const maxInitialIterations = qParams.path.indexOf(':') === -1 ? qParams.numRuns : -1;
   const maxSkips = qParams.numRuns * qParams.maxSkipsPerRun;
