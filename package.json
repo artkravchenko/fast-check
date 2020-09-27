@@ -1,6 +1,6 @@
 {
   "name": "@artkravchenko/fast-check",
-  "version": "2.3.0-SNAPSHOT.1",
+  "version": "2.3.0-SNAPSHOT.2",
   "description": "Property based testing framework for JavaScript (like QuickCheck)",
   "type": "commonjs",
   "main": "lib/fast-check.js",
