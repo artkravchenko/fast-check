@@ -1,5 +1,5 @@
 {
-  "name": "fast-check",
+  "name": "@artkravchenko/fast-check",
   "version": "2.3.0",
   "description": "Property based testing framework for JavaScript (like QuickCheck)",
   "type": "commonjs",
@@ -45,14 +45,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dubzzz/fast-check.git"
+    "url": "git+https://github.com/artkravchenko/fast-check.git"
   },
   "author": "Nicolas DUBIEN <github@dubien.org>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dubzzz/fast-check/issues"
+    "url": "https://github.com/artkravchenko/fast-check/issues"
   },
-  "homepage": "https://github.com/dubzzz/fast-check#readme",
+  "homepage": "https://github.com/artkravchenko/fast-check#readme",
   "engines": {
     "node": ">=8.0.0"
   },
