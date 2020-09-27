@@ -22,7 +22,7 @@ describe('Tosser', () => {
     it('Should offset the random number generator between calls', () =>
       fc.assert(
         fc.property(fc.integer(), fc.nat(100), (seed, start) => {
-          const s = stream(toss(wrap(stubArb.forwardArray(4)), seed, prand.xorshift128plus, []));
+          const s = stream(toss(wrap(stubArb.forwardArray(4)), seed, prand.xorshift128plus, [], []));
           const [g1, g2] = [
             ...s
               .drop(start)
@@ -37,11 +37,11 @@ describe('Tosser', () => {
       fc.assert(
         fc.property(fc.integer(), fc.nat(20), (seed, num) => {
           expect([
-            ...stream(toss(wrap(stubArb.forward()), seed, prand.xorshift128plus, []))
+            ...stream(toss(wrap(stubArb.forward()), seed, prand.xorshift128plus, [], []))
               .take(num)
               .map((f) => f().value),
           ]).toStrictEqual([
-            ...stream(toss(wrap(stubArb.forward()), seed, prand.xorshift128plus, []))
+            ...stream(toss(wrap(stubArb.forward()), seed, prand.xorshift128plus, [], []))
               .take(num)
               .map((f) => f().value),
           ]);
@@ -50,8 +50,8 @@ describe('Tosser', () => {
     it('Should not depend on the order of iteration', () =>
       fc.assert(
         fc.property(fc.integer(), fc.nat(20), (seed, num) => {
-          const onGoingItems1 = [...stream(toss(wrap(stubArb.forward()), seed, prand.xorshift128plus, [])).take(num)];
-          const onGoingItems2 = [...stream(toss(wrap(stubArb.forward()), seed, prand.xorshift128plus, [])).take(num)];
+          const onGoingItems1 = [...stream(toss(wrap(stubArb.forward()), seed, prand.xorshift128plus, [], [])).take(num)];
+          const onGoingItems2 = [...stream(toss(wrap(stubArb.forward()), seed, prand.xorshift128plus, [], [])).take(num)];
           expect(
             onGoingItems2
               .reverse()
@@ -64,13 +64,32 @@ describe('Tosser', () => {
       fc.assert(
         fc.property(fc.integer(), fc.nat(20), fc.array(fc.integer()), (seed, num, examples) => {
           const noExamplesProvided = [
-            ...stream(toss(wrap(stubArb.forward()), seed, prand.xorshift128plus, [])).take(num - examples.length),
+            ...stream(toss(wrap(stubArb.forward()), seed, prand.xorshift128plus, [], [])).take(num - examples.length),
           ].map((f) => f().value);
           const examplesProvided = [
-            ...stream(toss(wrap(stubArb.forward()), seed, prand.xorshift128plus, examples)).take(num),
+            ...stream(toss(wrap(stubArb.forward()), seed, prand.xorshift128plus, examples, [])).take(num),
           ].map((f) => f().value);
           expect([...examples, ...noExamplesProvided].slice(0, num)).toStrictEqual(examplesProvided);
         })
       ));
+    it('Should offset toss with the provided partial examples', () => {
+      const partialExamplesArb = fc.array(fc.integer()).map((arr) => arr.map((num) => () => num));
+      fc.assert(
+        fc.property(fc.integer(), fc.nat(20), partialExamplesArb, (seed, num, partialExamples) => {
+          const noExamplesProvided = [
+            ...stream(toss(wrap(stubArb.forward()), seed, prand.xorshift128plus, [], [])).take(num),
+          ].map((f) => f().value);
+          const examplesProvided = [
+            ...stream(toss(wrap(stubArb.forward()), seed, prand.xorshift128plus, [], partialExamples)).take(num),
+          ].map((f) => f().value);
+          expect(
+            [
+              ...partialExamples.map(f => f()),
+              ...noExamplesProvided.slice(partialExamples.length),
+            ].slice(0, num)
+          ).toStrictEqual(examplesProvided);
+        })
+      );
+    });
   });
 });
